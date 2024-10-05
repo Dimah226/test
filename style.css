@@ -1,0 +1,81 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+    color:antiquewhite;
+
+}
+
+body{
+    font-family: "Poppins", sans-serif;
+}
+.grille{
+    background-color: transparent;
+    aspect-ratio: 1 / 1;
+    transition: 0.5s ease-out;
+}
+header{  
+    background-color: aqua;
+    width: 100vw;
+    height: 100vh;
+    background-image: url(./landscape.jpg);
+    background-size: cover;
+    background-position: center;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); /* Limiter la taille minimale */
+    grid-template-rows: repeat(auto-fill, minmax(50px, 1fr)); /* Limiter la taille minimale */
+}
+
+nav{
+    display: flex;
+    width: 100vw;
+    justify-content: space-between;
+    position: fixed;
+    padding: 20px 50px;
+    align-items: center;
+}
+
+.sombre{
+    position: absolute;
+    left:40px;
+    border: 2px solid;
+    width: 200px;
+    height: 100px;
+    z-index: 1111;
+}
+
+.sombre:hover{
+    background-color: black;
+    transition: 2s ease;
+}
+
+nav p{
+    font-weight: bold;
+    font-size: 50px;
+}
+
+menu ul li a{
+    font-size: 20px;
+}
+
+menu ul {
+    display: flex;
+    gap: 0 20px;
+    align-items: center;
+}
+
+menu .activate{
+    color: aqua;
+    font-weight: 800;
+    font-size: x-large;
+}
+
+menu ul li a:hover{
+    color: aqua;
+    font-weight: 800;
+    font-size: x-large;
+}
+
