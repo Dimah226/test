@@ -1,50 +1,41 @@
-let selectedCells = []; // Déclarez le tableau pour stocker les cellules sélectionnées
-let clearIntervalId; // Pour stocker l'ID de l'intervalle
+let selectedCells = []; // Array to store selected cells
+let clearIntervalId; // To store the interval ID
 
+// Function to generate the grid
 function generateGrid(cellSize) {
     const colorDiv = document.querySelector(".color");
- // Taille minimale de la cellule en pixels
-    
-    // Vider le contenu actuel de la grille
-    colorDiv.innerHTML = "";
-    
-    // Récupérer les dimensions du conteneur .color
+    colorDiv.innerHTML = ""; // Clear current grid
+
+    // Get dimensions of the container
     const colorWidth = colorDiv.offsetWidth;
     const colorHeight = colorDiv.offsetHeight;
-    
-    // Calculer le nombre de colonnes et de lignes
+
+    // Calculate number of columns and rows
     const cols = Math.floor(colorWidth / cellSize);
     const rows = Math.floor(colorHeight / cellSize);
-    
-    // Calculer le nombre total de cellules
-    const totalCells = cols * rows;
+    const totalCells = cols * rows; // Total cells
 
-    // Générer les divs de grille
+    // Create grid cells
     for (let i = 0; i < totalCells; i++) {
         const div = document.createElement("div");
         div.classList.add("grille");
-        
-        // Ajouter un gestionnaire d'événements pour le survol
-        div.addEventListener("mouseenter", () => {
-            const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
 
-            // Vérifiez si la cellule est déjà sélectionnée
-            if (!selectedCells.includes(div)) {
-                // Si nous avons déjà 6 cellules, effacer la première
-                if (selectedCells.length === 6) {
-                    clearCell(selectedCells[0]);
-                }
+        // Add mouse enter event to change color
+        div.addEventListener("mouseenter", () => changeCellColor(div));
 
-                // Changer la couleur de la cellule
-                div.style.backgroundColor = randomColor;
-                
-                // Ajouter la cellule à la liste des cellules sélectionnées
-                selectedCells.push(div);
+        // Add touch events for mobile
+        div.addEventListener("touchstart", (e) => {
+            e.preventDefault(); // Prevent default touch behavior
+            changeCellColor(div);
+        });
 
-                // Démarrer l'effacement si ce n'est pas déjà en cours
-                if (!clearIntervalId) {
-                    startClearing();
-                }
+        // Use touchmove on the container to follow finger
+        colorDiv.addEventListener("touchmove", (e) => {
+            e.preventDefault(); // Prevent scrolling
+            const touch = e.touches[0]; // Get the first touch point
+            const targetDiv = document.elementFromPoint(touch.clientX, touch.clientY); // Get the element under the touch point
+            if (targetDiv && targetDiv.classList.contains("grille")) {
+                changeCellColor(targetDiv); // Change the color of the target cell
             }
         });
 
@@ -52,86 +43,114 @@ function generateGrid(cellSize) {
     }
 }
 
-// Fonction pour effacer une cellule
-function clearCell(cell) {
-    cell.style.backgroundColor = ""; // Réinitialiser la couleur
-    // Retirer la cellule de la liste des cellules sélectionnées
-    selectedCells.shift();
+// Function to change cell color
+function changeCellColor(cell) {
+    const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+
+    if (!selectedCells.includes(cell)) {
+        if (selectedCells.length === 6) {
+            clearCell(selectedCells[0]);
+        }
+
+        cell.style.backgroundColor = randomColor;
+        selectedCells.push(cell);
+
+        if (!clearIntervalId) {
+            startClearing();
+        }
+    }
 }
 
-// Fonction pour commencer à effacer progressivement les cellules sélectionnées
+// Function to clear a cell
+function clearCell(cell) {
+    cell.style.backgroundColor = ""; // Reset color
+    selectedCells.shift(); // Remove from selectedCells
+}
+
+// Function to start clearing cells
 function startClearing() {
     clearIntervalId = setInterval(() => {
         if (selectedCells.length > 0) {
-            clearCell(selectedCells[0]); // Effacer la première cellule
+            clearCell(selectedCells[0]); // Clear the first cell
         } else {
-            clearInterval(clearIntervalId); // Arrêter l'intervalle si aucune cellule n'est sélectionnée
-            clearIntervalId = null; // Réinitialiser l'ID de l'intervalle
+            clearInterval(clearIntervalId); // Stop clearing
+            clearIntervalId = null; // Reset the ID
         }
-    }, 100); // Délai de 0,1 seconde
+    }, 100); // Adjust timing as needed
 }
 
-// Appeler la fonction une première fois pour générer la grille
+// Call function to generate the grid
 generateGrid(50);
 
-// Ajouter un écouteur d'événement pour redimensionner la grille quand l'écran change
-window.addEventListener("resize", generateGrid(50));
+// Debounced resize event handler
+let resizeTimeout;
+window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        generateGrid(50); // Regenerate grid on resize
+    }, 100);
+});
 
-
+// Function to darken grid cells
 function assombrir() {
-    const colorDivs = document.querySelectorAll(".grille");  // Sélectionne tous les éléments avec la classe "color"
+    const colorDivs = document.querySelectorAll(".grille");
     colorDivs.forEach((el) => {
-        el.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; 
-        el.style.border = "solid rgba(0, 0, 0, 0.25)"; // Applique la couleur d'arrière-plan
+        el.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        el.style.border = "solid rgba(0, 0, 0, 0.25)";
     });
 }
 
-// Ajoute l'événement "mouseover" à l'élément avec la classe "sombre"
+// Event to darken cells on hover over "sombre"
 document.querySelector(".sombre").addEventListener("mouseover", assombrir);
 
+// Function to lighten grid cells
 function eclaircir() {
-    const colorDivs = document.querySelectorAll(".grille");  // Sélectionne tous les éléments avec la classe "color"
+    const colorDivs = document.querySelectorAll(".grille");
     colorDivs.forEach((el) => {
-        el.style.backgroundColor = ""; 
-        el.style.border="transparent"; // Applique la couleur d'arrière-plan
+        el.style.backgroundColor = "";
+        el.style.border = "transparent";
     });
 }
 
-// Ajoute l'événement "mouseover" à l'élément avec la classe "sombre"
+// Event to lighten cells on hover over "menu"
 document.querySelector("menu").addEventListener("mouseover", eclaircir);
 
-function change() {
+// Function to change text in title
+function changeTitle() {
     const titre = document.querySelector(".mention");
-    const mentions = [" Full-Stack", " Front-End", " Back-End"]; // Liste des mentions
-    let index = 0; // Index de la mention actuelle
+    const mentions = [" Full-Stack", " Front-End", " Back-End"];
+    let index = 0;
 
     setInterval(() => {
-        titre.textContent = mentions[index]; // Changer le texte de la mention
-        index = (index + 1) % mentions.length; // Incrémenter l'index et revenir à 0 après le dernier élément
-    }, 5000); // Délai de 5 secondes
+        titre.textContent = mentions[index];
+        index = (index + 1) % mentions.length;
+    }, 5000); // Change text every 5 seconds
 }
 
-change();
+// Call to change title
+changeTitle();
+
+// Function to shake emoji
 const emoji = document.querySelector("#emoji");
-function secoue() {
-    
+function shakeEmoji() {
     setInterval(() => {
-        // Ajouter la classe pour animer l'émoji
         emoji.classList.add("secoue");
-        // Retirer la classe après 500ms pour permettre l'animation à se répéter
         setTimeout(() => {
             emoji.classList.remove("secoue");
         }, 500);
-    }, 1000); // Délai de 5 secondes
+    }, 1000); // Shake every second
 }
 
-secoue();
+// Call to shake emoji
+shakeEmoji();
 
+// Menu burger toggle
+const menuBurger = document.querySelector(".menu-burger");
+menuBurger.addEventListener("click", () => {
+    document.querySelector("menu").classList.toggle("affiche");
+    document.querySelector(".salut").classList.toggle("hide");
+    eclaircir(); // Lighten grid cells when menu is opened
+});
 
-    const menuBurger = document.querySelector(".menu-burger");
-    menuBurger.addEventListener("click", () => {
-        document.querySelector("menu").classList.toggle("affiche");
-        document.querySelector(".salut").classList.toggle("hide");
-
-    });
-
+// Initialize the grid on first load
+generateGrid(50);
