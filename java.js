@@ -99,3 +99,39 @@ function eclaircir() {
 
 // Ajoute l'événement "mouseover" à l'élément avec la classe "sombre"
 document.querySelector("menu").addEventListener("mouseover", eclaircir);
+
+function change() {
+    const titre = document.querySelector(".mention");
+    const mentions = [" Full-Stack", " Front-End", " Back-End"]; // Liste des mentions
+    let index = 0; // Index de la mention actuelle
+
+    setInterval(() => {
+        titre.textContent = mentions[index]; // Changer le texte de la mention
+        index = (index + 1) % mentions.length; // Incrémenter l'index et revenir à 0 après le dernier élément
+    }, 5000); // Délai de 5 secondes
+}
+
+change();
+const emoji = document.querySelector("#emoji");
+function secoue() {
+    
+    setInterval(() => {
+        // Ajouter la classe pour animer l'émoji
+        emoji.classList.add("secoue");
+        // Retirer la classe après 500ms pour permettre l'animation à se répéter
+        setTimeout(() => {
+            emoji.classList.remove("secoue");
+        }, 500);
+    }, 1000); // Délai de 5 secondes
+}
+
+secoue();
+
+
+    const menuBurger = document.querySelector(".menu-burger");
+    menuBurger.addEventListener("click", () => {
+        document.querySelector("menu").classList.toggle("affiche");
+        document.querySelector(".salut").classList.toggle("hide");
+
+    });
+

@@ -23,7 +23,6 @@ header{
     background-image: url(./landscape.jpg);
     background-size: cover;
     background-position: center;
-
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); /* Limiter la taille minimale */
     grid-template-rows: repeat(auto-fill, minmax(50px, 1fr)); /* Limiter la taille minimale */
@@ -79,3 +78,136 @@ menu ul li a:hover{
     font-size: x-large;
 }
 
+.salut {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) skew(15deg); /* Centrage et inclinaison */
+    font-size: xx-large;
+    max-width: 400px;
+    height: fit-content;
+
+}
+
+.hamid{
+    font-weight: bolder;
+    font-size: 40px;
+    color: aqua;
+}
+
+.mention{
+    font-weight: bolder;
+    font-size: 40px;
+    color: rgb(195, 223, 54);
+    transition: 1s ease-in-out;
+}
+#emoji{
+    
+    position: inherit;
+}
+
+@keyframes shake {
+    0% { transform: translate(0); }
+    25% { transform: translate(-25px, 0); }
+    50% { transform: translate(25px, 0); }
+    75% { transform: translate(-25px, 0); }
+    100% { transform: translate(0); }
+}
+
+.secoue {
+    animation: shake 0.5s; /* Appliquer l'animation de secousse */
+}
+
+.menu-burger{
+    display: none;
+}
+
+
+@media screen and (max-width: 840px) {
+    /* Styles spécifiques pour les écrans de 840 pixels ou moins */
+    
+   menu{
+    /* display: none; */
+    position: absolute;
+    top: 0;
+    left: -100vw;
+    background-color: black ;
+    opacity: 50%;
+    backdrop-filter:blur(10px) ;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1111111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+   }
+
+   .affiche{
+    left:0;
+   }
+
+
+   menu ul{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+   }
+
+   menu ul li a{
+    font-size: 30px;
+   }
+   .menu-burger{
+    display: block;
+    height: 30px;
+    width:auto;
+    cursor: pointer;
+    z-index: 111111111111111111111111111111111111111111111111;
+   }
+
+   .logo{
+    font-size: 30px;
+    position: relative;
+    left: -15px;
+    z-index: -111;
+   }
+    
+   .sombre{
+    position: absolute;
+    left:10px;
+    border: 2px solid;
+    width: 150px;
+    height: 50px;
+    z-index: -1111;
+   }
+
+    .salut {
+        
+        font-size:larger;
+        max-width: 300px;
+    
+    }
+
+    .mention{
+        font-weight: bold;
+        font-size: 30px;
+    }
+    .hide{
+        display: none;
+    }
+
+    .hamid{
+        font-weight: bold;
+        font-size: 30px;
+    }
+    nav{
+        
+        width: 100vw;
+        justify-content: space-between;
+        position: fixed;
+        padding: 20px 50px;
+        align-items: center;
+    }
+
+
+}
