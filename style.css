@@ -134,7 +134,7 @@ button{
     font-size: 0.9em;
     font-weight: 600;
     margin-top: 10px;
-    width: fit-content;
+    width: 150px;
     transition: 0.5s ease;
 }
 
